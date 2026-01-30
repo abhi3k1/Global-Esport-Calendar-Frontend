@@ -19,8 +19,8 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-          <a href="/homepage" className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 rounded-lg font-semibold text-white shadow-md hover:opacity-95 transition">Find Tournaments</a>
-          <a href="/calendar" className="inline-block border border-purple-600 px-6 py-3 rounded-lg font-semibold text-gray-200 hover:bg-gray-800 transition">View Calendar</a>
+          <a href="/homepage" className="inline-block bg-[var(--brand-orange)] px-6 py-3 rounded-lg font-semibold text-black shadow-md hover:opacity-95 transition">Find Tournaments</a>
+          <a href="/calendar" className="inline-block border border-[var(--brand-orange)] px-6 py-3 rounded-lg font-semibold text-gray-200 hover:bg-[#0f0f10] transition">View Calendar</a>
         </div>
 
         <div className="flex justify-center gap-8 text-center">

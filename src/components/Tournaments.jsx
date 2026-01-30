@@ -44,25 +44,25 @@ export default function Tournaments() {
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold text-white">Discover Tournaments</h2>
-          <a href="/homepage" className="text-sm text-purple-300 hover:underline">View All</a>
+          <h2 className="text-3xl font-heading font-bold text-white">Discover Tournaments</h2>
+          <a href="/homepage" className="text-sm text-[var(--brand-cyan)] hover:underline">View All</a>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           {sample.map((t) => (
-            <div key={t.id} className="bg-gray-800 p-4 rounded-lg border border-purple-600 border-opacity-20 hover:shadow-lg">
+            <div key={t.id} className="bg-[var(--panel)] p-4 rounded-lg border border-[#272526] hover:shadow-lg">
               <div className="h-40 rounded-md overflow-hidden mb-3">
                 <img src={t.image} alt={t.title} className="w-full h-full object-cover" />
               </div>
               <div className="flex items-center justify-between text-xs text-gray-300 mb-2">
-                <span className="px-2 py-1 bg-purple-700 bg-opacity-30 rounded">{t.tier}</span>
+                <span className="px-2 py-1 bg-[var(--surface)] bg-opacity-40 rounded">{t.tier}</span>
                 <span className="font-semibold text-sm text-white">{t.status}</span>
               </div>
               <h3 className="text-lg font-semibold text-white mb-1">{t.title}</h3>
               <div className="text-sm text-gray-400 mb-3">{t.organizer} • {t.region} • {t.date}</div>
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-300">Prize: <span className="font-semibold">{t.prize}</span></div>
-                <a href="/event-detail" className="text-sm bg-gradient-to-r from-purple-600 to-pink-600 px-3 py-1 rounded text-white">View</a>
+                <a href="/event-detail" className="text-sm bg-[var(--brand-orange)] px-3 py-1 rounded text-black font-semibold">View</a>
               </div>
             </div>
           ))}

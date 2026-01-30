@@ -25,9 +25,9 @@ export default function Features() {
   ]
 
   return (
-    <section className="py-20 px-4 bg-gray-800 bg-opacity-50">
+    <section className="py-20 px-4 bg-[var(--panel)] bg-opacity-60">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+        <h2 className="text-4xl font-heading font-bold text-center mb-16 text-white">
           Why Choose Us?
         </h2>
 
