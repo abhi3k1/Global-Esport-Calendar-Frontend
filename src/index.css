@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@400;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,9 +10,22 @@
   box-sizing: border-box;
 }
 
+:root{
+  --bg:#09080a;
+  --panel:#0f0f10;
+  --surface:#111015;
+  --brand-orange:#ff7a2d;
+  --brand-cyan:#19d3ff;
+}
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: #e0e0e0;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: var(--bg);
+  color: #e6eef6;
   overflow-x: hidden;
+}
+
+/* small strip under navbar */
+.nav-strip{
+  background: linear-gradient(90deg, rgba(25,211,255,0.06), rgba(255,122,45,0));
 }
