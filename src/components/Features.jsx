@@ -1,43 +1,54 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Features() {
   const features = [
     {
       icon: '📅',
       title: 'Live Calendar',
-      description: 'Real-time tournament schedules and match updates'
+      description: 'Real-time tournament schedules and match updates',
+      to: '/calendar'
     },
     {
       icon: '🎮',
       title: 'Multiple Games',
-      description: 'Coverage of all major esports titles and events'
+      description: 'Coverage of all major esports titles and events',
+      to: '/tournaments'
     },
     {
       icon: '🏆',
       title: 'Rankings',
-      description: 'Team rankings, player stats, and leaderboards'
+      description: 'Team rankings, player stats, and leaderboards',
+      to: '/tournaments'
     },
     {
       icon: '🔔',
       title: 'Notifications',
-      description: 'Get alerts for your favorite tournaments and teams'
+      description: 'Get alerts for your favorite tournaments and teams',
+      to: '/profile'
+    },
+    {
+      icon: '📺',
+      title: 'Stream Highlights',
+      description: 'Quick access to ongoing broadcasts and important moments',
+      to: '/tournaments'
     },
   ]
 
   return (
-    <section className="py-20 px-4 bg-[var(--panel)] bg-opacity-60">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-heading font-bold text-center mb-16 text-white">
-          Why Choose Us?
-        </h2>
+    <section className="py-12 px-4">
+      <div className="container">
+        <h2 className="text-4xl font-heading font-bold text-center mb-8 text-white">Why Choose Us?</h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="features-row">
           {features.map((feature, idx) => (
-            <div key={idx} className="bg-gray-700 bg-opacity-50 p-6 rounded-lg border border-purple-500 border-opacity-20 hover:border-opacity-50 transition duration-300 hover:shadow-lg hover:shadow-purple-500/20">
-              <div className="text-4xl mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-400">{feature.description}</p>
-            </div>
+            <Link key={idx} to={feature.to || '/'} className={`feature-item card-compact feature-link`}>
+              <div className="feature-badge" aria-hidden>{feature.icon}</div>
+              <div className="feature-body">
+                <h3 className="text-lg font-semibold mb-1 feature-title">{feature.title}</h3>
+                <p className="feature-text">{feature.description}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

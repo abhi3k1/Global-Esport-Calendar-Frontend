@@ -1,25 +1,26 @@
 import React from 'react'
 import Hero from '../components/Hero'
 import Features from '../components/Features'
-import Tournaments from '../components/Tournaments'
 
 export default function Homepage() {
   return (
-    <div className="bg-gradient-to-b from-gray-900 to-gray-800">
+    <div>
       <Hero />
-      <Tournaments />
-      <Features />
+      {/* Slanted white feature band */}
+      <section className="slanted-band">
+        <div className="band-inner container">
+          <Features />
+        </div>
+      </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 text-center border-t border-purple-500 border-opacity-20">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-6">Ready to Join?</h2>
-          <p className="text-xl text-gray-300 mb-8">
+      {/* Dark CTA section below features */}
+      <section className="section">
+        <div className="container" style={{textAlign:'center'}}>
+          <h2 className="section-title">Ready to Join?</h2>
+          <p style={{fontSize:'1.25rem', color:'var(--text-secondary)', marginBottom:'2rem'}}>
             Sign up today and start tracking your favorite esports tournaments
           </p>
-          <button className="bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 rounded-lg font-semibold text-lg hover:shadow-lg hover:shadow-purple-500/50 transition duration-300">
-            Get Started Now
-          </button>
+          <a href="/signup" className="btn-primary"><span className="btn-inner">Get Started Now</span></a>
         </div>
       </section>
     </div>

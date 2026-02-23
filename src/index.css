@@ -1,31 +1,351 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Rajdhani:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Montserrat:wght@400;700;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-:root{
-  --bg:#09080a;
-  --panel:#0f0f10;
-  --surface:#111015;
-  --brand-orange:#ff7a2d;
-  --brand-cyan:#19d3ff;
+:root {
+  --bg-primary: #0e0a0f;
+  --bg-secondary: #1a1a2e;
+  --accent-magenta: #c2185b;
+  --accent-purple: #8e24aa;
+  --accent-cyan: #00bcd4;
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  /* UI panel and brand colors (brighter / pleasant) */
+  --panel: rgba(20,18,24,0.95);
+  --brand-orange: #ff8a2b;
+  --brand-cyan: #13d6e8;
+  /* nav button background (change this to toggle default nav button color) */
+  --nav-btn-bg: rgba(139, 13, 170, 0.925);
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-  background: var(--bg);
-  color: #e6eef6;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* small strip under navbar */
-.nav-strip{
-  background: linear-gradient(90deg, rgba(25,211,255,0.06), rgba(255,122,45,0));
+/* Ensure page content sits below fixed navbar */
+body { padding-top: 72px; }
+
+.hero {
+  height: 100vh;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
 }
+
+.hero h1 {
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--accent-magenta), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(194, 24, 91, 0.5);
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  /* constrain heading width to match paragraph for visual symmetry */
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin: 1.5rem 0;
+  max-width: 900px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-magenta), var(--accent-purple));
+  color: rgb(253, 252, 252);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.18s ease;
+  box-shadow: 0 4px 15px rgba(194, 24, 91, 0.3);
+  /* angled pill effect */
+  transform: skew(-12deg);
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) skew(-12deg);
+  box-shadow: 0 8px 25px rgba(194, 24, 91, 0.5);
+}
+
+.btn-primary:hover .btn-inner { transform: skew(12deg) translateY(-3px); }
+
+
+.btn-primary .btn-inner { display:inline-block; transform: skew(12deg); }
+
+.navbar {
+  background: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0 2rem;
+  height: 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.navbar-logo {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  align-items: center;
+}
+
+.navbar-nav a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav a:hover {
+  color: var(--accent-cyan);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Make hero content a centered column so heading and copy align symmetrically */
+.hero .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.75rem;
+}
+
+/* Navbar button styles matching template */
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.9rem;
+  border: 2px solid rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.06);
+  color: var(--accent-cyan);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: transform .12s ease, background .18s ease, color .12s ease, box-shadow .18s ease;
+  transform: skew(-12deg);
+  overflow: hidden;
+}
+.nav-btn .btn-inner { display:inline-block; transform: skew(12deg); }
+.nav-btn:hover{ transform: translateY(-3px) skew(-12deg); background: linear-gradient(90deg, var(--accent-magenta), var(--accent-purple)); color: white; box-shadow: 0 10px 30px rgba(194,24,91,0.28); }
+.nav-btn:hover .btn-inner { transform: skew(12deg) translateY(-3px); }
+.nav-btn--active{
+  background: #0a0a0f;
+  color: white;
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, var(--accent-magenta), var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer {
+  background: var(--bg-primary);
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer p {
+  color: var(--text-secondary);
+}
+
+/* Modal backdrop blur */
+.modal-backdrop{
+  background: rgba(0,0,0,0.5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+/* Modal panel transitions and states */
+.modal-root { }
+.modal-panel{
+  transition: transform .26s ease, opacity .26s ease;
+  transform-origin: center;
+  opacity: 1;
+}
+.modal-panel-enter{ opacity: 1; transform: translateY(0) scale(1); }
+.modal-panel-exit{ opacity: 0; transform: translateY(8px) scale(0.98); }
+.modal-backdrop{ transition: opacity .26s ease, backdrop-filter .26s ease; }
+
+/* Subtle brighter adjustments for inputs / focus */
+input:focus, textarea:focus, select:focus {
+  box-shadow: 0 0 0 4px rgba(19, 214, 232, 0.08);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+  }
+  
+  .navbar-nav {
+    gap: 1rem;
+  }
+  
+  .hero h1 {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+  }
+}
+
+
+/* Glow effects */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.glow-pink {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+}
+
+/* Feature cards styling (large white cards with center dark highlight) */
+.features-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+.feature-item {
+  position: relative;
+  background: #ffffff;
+  color: #111;
+  border: 4px solid rgba(0,0,0,0.95);
+  padding: 2rem;
+  border-radius: 6px;
+  min-height: 170px;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  overflow: visible;
+}
+
+/* Ensure links wrapping cards don't get default anchor styles */
+.feature-link { text-decoration: none; color: inherit; display: block; }
+.feature-badge{
+  position: absolute;
+  top: -18px;
+  left: 18px;
+  background: #e53935;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  font-weight:700;
+}
+.feature-body{ margin-left: 0 }
+.feature-title{ font-size:1.25rem; margin-bottom:0.5rem }
+.feature-text{ color: #333; }
+
+.feature-item{
+  transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease, color 220ms ease;
+}
+
+.feature-item:hover{
+  background: #133eb6;
+  color: #fff;
+  border-color: var(--accent-magenta);
+  transform: rotate(-2deg);
+  box-shadow: 0 10px 40px rgba(194,24,91,0.12);
+  
+}
+
+.feature-item:hover .feature-text{ color: rgba(255,255,255,0.85); }
+.feature-item:hover .feature-title{ color: #fff }
+.feature-item:hover .feature-badge{ background: var(--accent-magenta); }
+
+@media (max-width: 980px) {
+  .features-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .features-row { grid-template-columns: 1fr; }
+  .feature-item { transform: none; }
+}
+
+/* Slanted white band that contains the features section
+   - outer element is skewed to create the slanted edges
+   - inner element is counter-skewed so content remains horizontal
+   - subtle dotted pattern to match the reference
+*/
+.slanted-band{
+  background: #ffffff;
+  color: #111;
+  transform: skewY(-3deg);
+  margin: 0 -9999px; /* extend beyond page to hide edges */
+  padding: 4rem 0;
+  position: relative;
+  z-index: 0;
+  /* dotted halftone effect */
+  background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+.slanted-band .band-inner{
+  transform: skewY(3deg);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Make feature cards look more boxed against the white band */
+.slanted-band .feature-item{
+  border: 4px solid #0b0b0b;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+/* accent the middle card visually on larger screens */
+/* Keep cards consistent with global hover effects; no forced accent here. */

@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Navbar from './components/Navbar'
+import Layout from './components/Layout'
+import ScrollToTop from './components/ScrollToTop'
 import Homepage from './pages/Homepage'
 import Calendar from './pages/Calendar'
 import Tournaments from './pages/Tournaments'
 import RegionalViews from './pages/RegionalViews'
 import SubmitEvent from './pages/SubmitEvent'
 import Signup from './pages/Signup'
+import Profile from './pages/Profile'
 import './App.css'
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-900">
-        <Navbar />
+      <ScrollToTop />
+      <Layout>
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/homepage" element={<Homepage />} />
@@ -22,8 +24,9 @@ function App() {
           <Route path="/regional-views" element={<RegionalViews />} />
           <Route path="/submit-event" element={<SubmitEvent />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Routes>
-      </div>
+      </Layout>
     </Router>
   )
 }

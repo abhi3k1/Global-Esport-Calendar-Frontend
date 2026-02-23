@@ -1,41 +1,37 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 export default function Hero() {
-  return (
-    <section className="min-h-96 flex items-center justify-center px-4 py-20 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-12 left-8 w-80 h-80 bg-purple-500 rounded-full filter blur-3xl"></div>
-        <div className="absolute bottom-8 right-12 w-80 h-80 bg-pink-500 rounded-full filter blur-3xl"></div>
-      </div>
+  const blobA = useRef(null)
+  const blobB = useRef(null)
 
-      <div className="max-w-5xl mx-auto text-center relative z-10">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight text-white">
-          The Heartbeat of Competitive Gaming
+  useEffect(() => {
+    function onScroll() {
+      const t = window.scrollY || window.pageYOffset
+      if (blobA.current) blobA.current.style.transform = `translateY(${t * -0.08}px)`
+      if (blobB.current) blobB.current.style.transform = `translateY(${t * -0.05}px)`
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <section className="hero">
+      <div ref={blobA} style={{position:'absolute', left:'6%', top:'6%', width:520, height:520, borderRadius:'50%', background: 'linear-gradient(120deg, var(--accent-magenta), var(--accent-purple))', filter:'blur(120px)', opacity:0.9, pointerEvents:'none'}} />
+      <div ref={blobB} style={{position:'absolute', right:'6%', bottom:'6%', width:640, height:640, borderRadius:'50%', background: 'linear-gradient(120deg, var(--accent-purple), var(--accent-magenta))', filter:'blur(140px)', opacity:0.85, pointerEvents:'none'}} />
+
+      <div className="container">
+        <h1>
+          Never Miss a Match — All Tournaments, One Place
         </h1>
 
-        <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-          Discover grassroots and professional esports tournaments across Asia-Pacific. From university cups to regional
-          championships, never miss your moment to compete or watch.
+        <p>
+          Track grassroots to pro esports across PC, console and mobile. Find live streams, schedules, and local cups — discover events you care about and get notified when they go live.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-          <a href="/homepage" className="inline-block bg-[var(--brand-orange)] px-6 py-3 rounded-lg font-semibold text-black shadow-md hover:opacity-95 transition">Find Tournaments</a>
-          <a href="/calendar" className="inline-block border border-[var(--brand-orange)] px-6 py-3 rounded-lg font-semibold text-gray-200 hover:bg-[#0f0f10] transition">View Calendar</a>
-        </div>
-
-        <div className="flex justify-center gap-8 text-center">
-          <div>
-            <div className="text-3xl font-bold text-white">1,247</div>
-            <div className="text-sm text-gray-400">Active Tournaments</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-white">247</div>
-            <div className="text-sm text-gray-400">Live Now</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-white">892</div>
-            <div className="text-sm text-gray-400">Upcoming This Week</div>
-          </div>
+        <div style={{display:'flex', gap:'1rem', justifyContent:'center', marginTop:'2rem'}}>
+          <a href="/tournaments" className="btn-primary"><span className="btn-inner">Find Tournaments</span></a>
+          <a href="/calendar" className="btn-primary"><span className="btn-inner">View Calendar</span></a>
         </div>
       </div>
     </section>
