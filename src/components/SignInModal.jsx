@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const API_BASE = 'http://localhost:8080/api'
+const API_BASE = 'http://localhost:8080/api/users'
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function SignInModal({ open, onClose }) {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState({})
@@ -79,10 +80,30 @@ export default function SignInModal({ open, onClose }) {
     try {
       // Expected backend: POST `${API_BASE}/auth/login` with { email, password }
       // Expected success response: { token: 'jwt', user: { id, username, ... } }
-      const res = await axios.post(`${API_BASE}/auth/login`, { email, password })
-      const token = res?.data?.token || res?.data?.accessToken
+      const res = await axios.post(`${API_BASE}/login`, { email, password })
+      const token = res?.data?.token || res?.data?.accessToken || res?.data?.authToken
       if (token) localStorage.setItem('authToken', token)
-      if (res?.data?.user) localStorage.setItem('user', JSON.stringify(res.data.user))
+
+      // Normalize user object from various backend shapes
+      const userObj = res?.data?.user ?? res?.data ?? null
+      let storedUser = null
+      if (userObj && typeof userObj === 'object') {
+        // If the response included extra wrapper keys, try to find the user object
+        // e.g., { user: {...} } or { id: ..., username: ... }
+        storedUser = userObj
+      }
+
+      if (storedUser) {
+        localStorage.setItem('user', JSON.stringify(storedUser))
+        try { window.dispatchEvent(new Event('authChanged')) } catch (e) {}
+        const uid = storedUser.id || storedUser._id || storedUser.userId || storedUser.userid
+        setSubmitting(false)
+        onClose()
+        if (uid) navigate(`/profile/${uid}`)
+        return
+      }
+
+      // Fallback: close modal even if user info isn't present
       setSubmitting(false)
       onClose()
     } catch (err) {

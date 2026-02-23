@@ -58,11 +58,9 @@ export default function Signup() {
       }
 
       const res = await axios.post(`${API_BASE}/signup`, payload)
-      const id = res.data.id || res.data?.user?.id
-      const token = res.data?.token || res.data?.accessToken
-      if (token) localStorage.setItem('authToken', token)
-      if (res?.data?.user) localStorage.setItem('user', JSON.stringify(res.data.user))
-      if (id) navigate(`/profile/${id}`)
+      // After signup, do NOT auto-login — redirect user to the login page
+      // so they can sign in with their new credentials.
+      navigate('/login')
     } catch (err) {
       // prefer structured server message when available
       const server = err?.response?.data?.message || err?.response?.data || err.message
