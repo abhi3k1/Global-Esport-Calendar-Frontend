@@ -6,7 +6,7 @@ const API_BASE = 'http://localhost:8080/api/users'
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function Login() {
-  const [email, setEmail] = useState('')
+  const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
@@ -14,8 +14,7 @@ export default function Login() {
 
   function validate() {
     const out = {}
-    if (!email) out.email = 'Email is required'
-    else if (!emailRegex.test(email)) out.email = 'Enter a valid email'
+    if (!identifier) out.identifier = 'Email or username is required'
     if (!password) out.password = 'Password is required'
     else if (password.length < 6) out.password = 'Password must be at least 6 characters'
     setErrors(out)
@@ -27,7 +26,11 @@ export default function Login() {
     if (!validate()) return
     setSubmitting(true)
     try {
-      const res = await axios.post(`${API_BASE}/login`, { email, password })
+      const isEmail = emailRegex.test(identifier)
+      const loginPayload = isEmail
+        ? { email: identifier, password }
+        : { username: identifier, password }
+      const res = await axios.post(`${API_BASE}/login`, loginPayload)
 
       // Normalize token and user from different backend shapes
       const token = res?.data?.token || res?.data?.accessToken || res?.data?.authToken
@@ -42,7 +45,8 @@ export default function Login() {
         const id = userObj.id || userObj._id || userObj.userId || userObj.userid
         if (id) {
           try {
-            const profileRes = await axios.get(`${API_BASE}/${id}/profile`)
+            const authHeader = token ? { Authorization: `Bearer ${token}` } : {}
+            const profileRes = await axios.get(`${API_BASE}/${id}/profile`, { headers: authHeader })
             setSubmitting(false)
             // First-time login: no profile yet — send to profile setup
             // Returning user: profile exists — send to homepage
@@ -51,9 +55,15 @@ export default function Login() {
             } else {
               navigate(`/profile/${id}`)
             }
-          } catch {
+          } catch (profileErr) {
             setSubmitting(false)
-            navigate('/')
+            const status = profileErr?.response?.status
+            // 404 = genuinely no profile yet → first-time setup
+            if (status === 404) {
+              navigate(`/profile/${id}`)
+            } else {
+              navigate('/')
+            }
           }
         } else {
           setSubmitting(false)
@@ -80,17 +90,17 @@ export default function Login() {
           {errors.form && <div className="text-sm text-red-400">{errors.form}</div>}
 
           <div>
-            <label className="text-sm text-gray-300 block mb-1">Email</label>
+            <label className="text-sm text-gray-300 block mb-1">Email or Username</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
               className="w-full mt-1 px-3 py-2 bg-[#0b0b0c] rounded text-gray-200 border border-transparent focus:border-[var(--accent-cyan)] outline-none focus:ring-2 focus:ring-[var(--brand-cyan)]"
-              placeholder="you@example.com"
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? 'login-email-error' : undefined}
+              placeholder="you@example.com or username"
+              aria-invalid={!!errors.identifier}
+              aria-describedby={errors.identifier ? 'login-identifier-error' : undefined}
             />
-            {errors.email && <div id="login-email-error" className="text-xs text-red-400 mt-1">{errors.email}</div>}
+            {errors.identifier && <div id="login-identifier-error" className="text-xs text-red-400 mt-1">{errors.identifier}</div>}
           </div>
 
           <div>
