@@ -40,10 +40,23 @@ export default function Login() {
         // notify other components (Navbar) that auth changed
         try { window.dispatchEvent(new Event('authChanged')) } catch (e) {}
         const id = userObj.id || userObj._id || userObj.userId || userObj.userid
-        setSubmitting(false)
         if (id) {
-          navigate(`/profile/${id}`)
+          try {
+            const profileRes = await axios.get(`${API_BASE}/${id}/profile`)
+            setSubmitting(false)
+            // First-time login: no profile yet — send to profile setup
+            // Returning user: profile exists — send to homepage
+            if (profileRes?.data?.id) {
+              navigate('/')
+            } else {
+              navigate(`/profile/${id}`)
+            }
+          } catch {
+            setSubmitting(false)
+            navigate('/')
+          }
         } else {
+          setSubmitting(false)
           navigate('/')
         }
       } else {

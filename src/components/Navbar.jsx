@@ -48,7 +48,7 @@ export default function Navbar({ onOpenSignIn }) {
   return (
     <>
       <nav className="navbar">
-        <Link to="/" className="navbar-logo">
+        <Link to="/" className="navbar-logo" onClick={() => navigate('/') }>
           ⚡ Global Esports Calendar
         </Link>
 

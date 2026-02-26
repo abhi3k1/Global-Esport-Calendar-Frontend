@@ -97,9 +97,25 @@ export default function SignInModal({ open, onClose }) {
         localStorage.setItem('user', JSON.stringify(storedUser))
         try { window.dispatchEvent(new Event('authChanged')) } catch (e) {}
         const uid = storedUser.id || storedUser._id || storedUser.userId || storedUser.userid
-        setSubmitting(false)
         onClose()
-        if (uid) navigate(`/profile/${uid}`)
+        if (uid) {
+          try {
+            const profileRes = await axios.get(`${API_BASE}/${uid}/profile`)
+            setSubmitting(false)
+            // First-time login: no profile yet — send to profile setup
+            // Returning user: profile exists — send to homepage
+            if (profileRes?.data?.id) {
+              navigate('/')
+            } else {
+              navigate(`/profile/${uid}`)
+            }
+          } catch {
+            setSubmitting(false)
+            navigate('/')
+          }
+        } else {
+          setSubmitting(false)
+        }
         return
       }
 
