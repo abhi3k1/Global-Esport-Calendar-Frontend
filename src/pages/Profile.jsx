@@ -18,8 +18,11 @@ export default function Profile() {
     if (!id) return
     setLoading(true)
 
-    const uReq = axios.get(`${API_BASE}/${id}`).catch(() => null)
-    const pReq = axios.get(`${API_BASE}/${id}/profile`).catch(() => null)
+    const token = localStorage.getItem('authToken')
+    const authHeader = token ? { Authorization: `Bearer ${token}` } : {}
+
+    const uReq = axios.get(`${API_BASE}/${id}`, { headers: authHeader }).catch(() => null)
+    const pReq = axios.get(`${API_BASE}/${id}/profile`, { headers: authHeader }).catch(() => null)
 
     Promise.all([uReq, pReq])
       .then(([uRes, pRes]) => {
@@ -30,7 +33,6 @@ export default function Profile() {
             primaryGames: pRes.data.primaryGames || '',
             careerHistory: pRes.data.careerHistory || '',
             updateDate: pRes.data.updateDate || null,
-            id: pRes.data.id || null,
           })
           setEditing(false)
         } else {
@@ -47,6 +49,9 @@ export default function Profile() {
     setSaving(true)
     setError(null)
     try {
+      const token = localStorage.getItem('authToken')
+      const authHeader = token ? { Authorization: `Bearer ${token}` } : {}
+
       const payload = {
         bio: profile.bio,
         primaryGames: profile.primaryGames,
@@ -54,14 +59,11 @@ export default function Profile() {
         user: { id: Number(id) },
       }
 
-      if (profile.id) await axios.put(`${API_BASE}/${id}/profile`, payload)
-      else {
-        const res = await axios.post(`${API_BASE}/${id}/profile`, payload)
-        if (res?.data) setProfile((s) => ({ ...s, id: res.data.id }))
-      }
+      // User:profile is 1:1 — always upsert via PUT using the user id
+      await axios.put(`${API_BASE}/${id}/profile`, payload, { headers: authHeader })
 
-      const r = await axios.get(`${API_BASE}/${id}/profile`)
-      if (r?.data) setProfile((s) => ({ ...s, bio: r.data.bio || '', primaryGames: r.data.primaryGames || '', careerHistory: r.data.careerHistory || '', updateDate: r.data.updateDate || null }))
+      const r = await axios.get(`${API_BASE}/${id}/profile`, { headers: authHeader })
+      if (r?.data) setProfile({ bio: r.data.bio || '', primaryGames: r.data.primaryGames || '', careerHistory: r.data.careerHistory || '', updateDate: r.data.updateDate || null })
       setEditing(false)
     } catch (e) {
       setError(e?.response?.data || e.message)
@@ -73,7 +75,9 @@ export default function Profile() {
   const remove = async () => {
     if (!window.confirm('Delete your profile? This cannot be undone.')) return
     try {
-      await axios.delete(`${API_BASE}/${id}/profile`)
+      const token = localStorage.getItem('authToken')
+      const authHeader = token ? { Authorization: `Bearer ${token}` } : {}
+      await axios.delete(`${API_BASE}/${id}/profile`, { headers: authHeader })
       navigate('/')
     } catch (e) {
       setError(e?.response?.data || e.message)
