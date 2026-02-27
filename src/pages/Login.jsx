@@ -27,9 +27,11 @@ export default function Login() {
     setSubmitting(true)
     try {
       const isEmail = emailRegex.test(identifier)
-      const loginPayload = isEmail
-        ? { email: identifier, password }
-        : { username: identifier, password }
+      const loginPayload = {
+        email:    isEmail ? identifier : '',
+        username: isEmail ? '' : identifier,
+        password,
+      }
       const res = await axios.post(`${API_BASE}/login`, loginPayload)
 
       // Normalize token and user from different backend shapes
